@@ -27,7 +27,7 @@ jobs:
       - name: "🚀 Deploy and Build Frontend"
         run: |
           ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-            cd $FRONTEND_DIR
+            cd /home/ubuntu/tarim-web-v3/frontend
             git pull origin main
             npm install
             npm run build
