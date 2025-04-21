@@ -13,8 +13,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#adding last change to test EC2
-
 app.include_router(devices.router)  # ✅ Attach the router
 
 @app.get("/")
