@@ -3,7 +3,7 @@ import axios from 'axios';
 import DeviceSelector from './components/DeviceSelector';
 import SensorTable from './components/SensorTable';
 
-// ✅ Use your actual backend IP or domain here
+// ✅ backend API
 const API_BASE = "http://3.89.123.5:8000";
 
 function App() {
