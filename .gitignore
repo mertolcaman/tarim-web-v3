@@ -1,0 +1,17 @@
+# === BACKEND ===
+backend/venv/
+backend/__pycache__/
+backend/.env
+*.pyc
+
+# === FRONTEND ===
+frontend/node_modules/
+frontend/dist/
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+
+# === Keys ===
+deploy_key
+deploy_key.pub
