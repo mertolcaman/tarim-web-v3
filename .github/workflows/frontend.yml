@@ -1,0 +1,35 @@
+name: "🚀 CI/CD: Deploy Frontend (Vite + Nginx)"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend.yml"
+
+jobs:
+  deploy-frontend:
+    name: "Deploy Frontend"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "🔐 Set up SSH access to EC2"
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
+
+      - name: "🚀 Deploy and Build Frontend"
+        run: |
+          ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            cd $FRONTEND_DIR
+            git pull origin main
+            npm install
+            npm run build
+            sudo cp -r dist/* /var/www/html/
+          EOF
