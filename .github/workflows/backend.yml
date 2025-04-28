@@ -32,5 +32,5 @@ jobs:
             docker stop tarim-backend || true
             docker rm tarim-backend || true
             docker build -t tarim-backend .
-            docker run -d --name tarim-backend -p 8000:8000 tarim-backend
+            docker run --env-file .env -d --name tarim-backend -p 8000:8000 tarim-backend
           EOF
