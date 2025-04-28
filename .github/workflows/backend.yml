@@ -26,15 +26,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🐳 Build Docker image
-        run: |
-          docker build -t tarim-backend .
-
-      - name: 🛑 Stop old container if exists
-        run: |
-          docker stop tarim-backend || true
-          docker rm tarim-backend || true
-
-      - name: 🚀 Run new container
-        run: |
-          docker run -d --name tarim-backend -p 8000:8000 tarim-backend
+      # 🚀 SSH into EC2 and deploy
+      - name: 🚀 SSH into EC2 and deploy
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /path/to/your/project/backend
+            git pull
+            docker stop tarim-backend || true
+            docker rm tarim-backend || true
+            docker build -t tarim-backend .
+            docker run -d --name tarim-backend -p 8000:8000 tarim-backend
