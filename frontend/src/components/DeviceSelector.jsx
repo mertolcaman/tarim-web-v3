@@ -10,12 +10,14 @@ function DeviceSelector({ devices, selectedDevice, setSelectedDevice, limit, set
                     value={selectedDevice}
                     onChange={(e) => setSelectedDevice(e.target.value)}
                 >
+                    <option value="ALL">All Devices</option> {/* 👈 Added */}
                     {devices.map((device) => (
                         <option key={device.device_id} value={device.device_id}>
                             {device.device_id}
                         </option>
                     ))}
                 </select>
+
             </div>
             <div className="col-md-4">
                 <label className="form-label">Number of Items</label>
@@ -25,7 +27,7 @@ function DeviceSelector({ devices, selectedDevice, setSelectedDevice, limit, set
                     value={limit}
                     onChange={(e) => setLimit(Number(e.target.value))}
                     min={1}
-                    max={100}
+
                 />
             </div>
             <div className="col-md-4 d-flex align-items-end">

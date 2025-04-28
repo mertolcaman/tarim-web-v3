@@ -8,7 +8,7 @@ const API_BASE = "http://3.89.123.5:8000";
 
 function App() {
   const [devices, setDevices] = useState([]);
-  const [selectedDevice, setSelectedDevice] = useState("001");
+  const [selectedDevice, setSelectedDevice] = useState("ALL");
   const [limit, setLimit] = useState(10);
   const [sensorData, setSensorData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -19,11 +19,8 @@ function App() {
     axios.get(`${API_BASE}/devices/`)
       .then(res => {
         setDevices(res.data);
-        const defaultDevice = res.data.find(d => d.device_id === "001")?.device_id || res.data[0]?.device_id;
-        setSelectedDevice(defaultDevice);
-        if (defaultDevice) {
-          return axios.get(`${API_BASE}/devices/${defaultDevice}/data?limit=${limit}`);
-        }
+        setSelectedDevice("ALL");
+        return axios.get(`${API_BASE}/devices/data?limit=${limit}`);
       })
       .then(res => {
         if (res) setSensorData(res.data);
@@ -41,9 +38,24 @@ function App() {
       .finally(() => setLoading(false));
   };
 
-  const handleSubmit = () => {
-    fetchSensorData(selectedDevice, limit);
+  const fetchAllSensorData = (itemLimit) => {
+    setLoading(true);
+    axios.get(`${API_BASE}/devices/data?limit=${itemLimit}`)
+      .then(res => setSensorData(res.data))
+      .catch(err => console.error("Sensor data fetch failed:", err))
+      .finally(() => setLoading(false));
   };
+
+
+  const handleSubmit = () => {
+    if (selectedDevice === "ALL") {
+      fetchAllSensorData(limit);
+    } else {
+      fetchSensorData(selectedDevice, limit);
+    }
+  };
+
+
 
   // 🔧 Loading screen
   if (loading) {
