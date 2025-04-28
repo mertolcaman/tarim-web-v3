@@ -4,7 +4,7 @@ function DeviceSelector({ devices, selectedDevice, setSelectedDevice, limit, set
     return (
         <div className="row mb-4">
             <div className="col-md-4">
-                <label>Select Device</label>
+                <label className="form-label">Select Device</label>
                 <select
                     className="form-select"
                     value={selectedDevice}
@@ -18,7 +18,7 @@ function DeviceSelector({ devices, selectedDevice, setSelectedDevice, limit, set
                 </select>
             </div>
             <div className="col-md-4">
-                <label>Number of Items</label>
+                <label className="form-label">Number of Items</label>
                 <input
                     type="number"
                     className="form-control"
