@@ -1,4 +1,4 @@
-name: 🚀 Build & Test Backend (Docker)
+name: 🚀 Build & Deploy Backend (Docker)
 
 on:
   push:
@@ -30,4 +30,11 @@ jobs:
         run: |
           docker build -t tarim-backend .
 
-      # Optional: add DockerHub login + push here later
+      - name: 🛑 Stop old container if exists
+        run: |
+          docker stop tarim-backend || true
+          docker rm tarim-backend || true
+
+      - name: 🚀 Run new container
+        run: |
+          docker run -d --name tarim-backend -p 8000:8000 tarim-backend
