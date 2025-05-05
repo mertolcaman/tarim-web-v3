@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const SKIP_FILTER_KEYS = ['sensor_data_id']; // No filter & no sorting for sensor_data_id
+const SKIP_FILTER_KEYS = ['sensor_data_id'];
 
 function formatLocalTime(utcString) {
     const date = new Date(utcString);
@@ -26,51 +26,27 @@ function SensorTable({ sensorData }) {
             return Object.keys(filters).every(key => {
                 const filterValue = filters[key];
                 const filterOp = filterOps[key] || '=';
-                if (filterValue === '' || filterValue === undefined) return true;
+                if (!filterValue) return true;
 
                 if (key === 'device_id') {
                     return row[key] === filterValue;
                 }
 
-                // Special handling for time_created_at
                 if (key === 'time_created_at') {
-                    const serverDateStr = row[key];   // server UTC time string
-                    let userInput = filterValue.trim();
+                    const serverDateStr = row[key];
+                    const userInput = filterValue.trim();
+                    if (!userInput) return true;
 
-                    if (!userInput) return true; // no filter
-
-                    // Step 1: Parse user input as Local time
-                    let userDate = new Date(userInput);
-
-                    if (isNaN(userDate)) {
-                        return true; // invalid date
-                    }
-
-                    // Step 2: Convert user input to UTC string (in same format)
-                    // Important: Do NOT use .toISOString(), because we want "YYYY-MM-DD HH:MM:SS" not "T" format
+                    const userDate = new Date(userInput);
+                    if (isNaN(userDate)) return true;
 
                     const pad = (num) => num.toString().padStart(2, '0');
-
-                    const utcYear = userDate.getUTCFullYear();
-                    const utcMonth = pad(userDate.getUTCMonth() + 1);
-                    const utcDay = pad(userDate.getUTCDate());
-                    const utcHours = pad(userDate.getUTCHours());
-                    const utcMinutes = pad(userDate.getUTCMinutes());
-                    const utcSeconds = pad(userDate.getUTCSeconds());
-
-                    const userUtcString = `${utcYear}-${utcMonth}-${utcDay} ${utcHours}:${utcMinutes}:${utcSeconds}`;
-
-                    // Step 3: Detect if user typed date-only (length <= 10)
+                    const userUtcString = `${userDate.getUTCFullYear()}-${pad(userDate.getUTCMonth() + 1)}-${pad(userDate.getUTCDate())} ${pad(userDate.getUTCHours())}:${pad(userDate.getUTCMinutes())}:${pad(userDate.getUTCSeconds())}`;
                     const filterValueHasTime = userInput.length > 10;
 
                     if (!filterValueHasTime && filterOp === '=') {
-                        // Only date comparison
-                        const serverDateOnly = serverDateStr.substring(0, 10);
-                        const userDateOnly = userUtcString.substring(0, 10);
-
-                        return serverDateOnly === userDateOnly;
+                        return serverDateStr.substring(0, 10) === userUtcString.substring(0, 10);
                     } else {
-                        // Full datetime string comparison
                         switch (filterOp) {
                             case '>': return serverDateStr > userUtcString;
                             case '<': return serverDateStr < userUtcString;
@@ -80,16 +56,10 @@ function SensorTable({ sensorData }) {
                     }
                 }
 
-
-
-
-
-
                 const cellValue = parseFloat(row[key]);
                 const filterNum = parseFloat(filterValue);
 
                 if (isNaN(cellValue) || isNaN(filterNum)) {
-                    // Text-based fallback
                     return String(row[key]).toLowerCase().includes(filterValue.toLowerCase());
                 }
 
@@ -101,7 +71,6 @@ function SensorTable({ sensorData }) {
                 }
             });
         });
-
 
         if (sortConfig.key) {
             newData = [...newData].sort((a, b) => {
@@ -115,17 +84,11 @@ function SensorTable({ sensorData }) {
     }, [filters, filterOps, sortConfig, sensorData]);
 
     const handleFilterChange = (key, value) => {
-        setFilters(prev => ({
-            ...prev,
-            [key]: value
-        }));
+        setFilters(prev => ({ ...prev, [key]: value }));
     };
 
     const handleFilterOpChange = (key, op) => {
-        setFilterOps(prev => ({
-            ...prev,
-            [key]: op
-        }));
+        setFilterOps(prev => ({ ...prev, [key]: op }));
     };
 
     const handleSortClick = (key, direction) => {
@@ -135,9 +98,8 @@ function SensorTable({ sensorData }) {
     const uniqueDeviceIds = [...new Set(sensorData.map(item => item.device_id))];
 
     return (
-        <>
-            {/* Total Count Section */}
-            <div className="mt-2">
+        <div className="d-flex flex-column align-items-center justify-content-center w-100 mt-4">
+            <div className="mb-3 text-center">
                 <p className="text-muted small">
                     Showing {filteredData.length} item(s)
                     {filteredData.length > 0 && (
@@ -148,8 +110,7 @@ function SensorTable({ sensorData }) {
                 </p>
             </div>
 
-
-            <table className="table table-bordered table-striped">
+            <table className="table table-bordered table-striped text-center align-middle w-auto">
                 <thead>
                     <tr>
                         {sensorData[0] && Object.keys(sensorData[0]).map((key) => (
@@ -179,7 +140,6 @@ function SensorTable({ sensorData }) {
                                         )}
                                     </div>
 
-                                    {/* Filters */}
                                     {!SKIP_FILTER_KEYS.includes(key) && (
                                         key === 'device_id' ? (
                                             <select
@@ -229,9 +189,7 @@ function SensorTable({ sensorData }) {
                     ))}
                 </tbody>
             </table>
-
-
-        </>
+        </div>
     );
 }
 
