@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import devices
+from routers import devices, auth  
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -14,6 +14,7 @@ app.add_middleware(
 )
 
 app.include_router(devices.router)  # ✅ Attach the router
+app.include_router(auth.router)
 
 @app.get("/")
 def read_root():

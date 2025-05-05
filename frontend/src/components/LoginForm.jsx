@@ -1,5 +1,7 @@
-// components/LoginForm.jsx
 import React, { useState } from 'react';
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 const LoginForm = ({ onLogin }) => {
     const [loginData, setLoginData] = useState({ email: '', password: '' });
@@ -8,10 +10,15 @@ const LoginForm = ({ onLogin }) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert(`Logged in as ${loginData.email}`);
-        if (onLogin) onLogin();
+        try {
+            const response = await axios.post(`${API_BASE}/auth/login`, loginData);
+            alert(response.data.message);
+            if (onLogin) onLogin();
+        } catch (error) {
+            alert(error.response?.data?.detail || "Login failed.");
+        }
     };
 
     return (
@@ -39,10 +46,6 @@ const LoginForm = ({ onLogin }) => {
                     onChange={handleChange}
                     required
                 />
-            </div>
-            <div className="form-group form-check mb-3">
-                <input type="checkbox" className="form-check-input" />
-                <label className="form-check-label">Remember me</label>
             </div>
             <button type="submit" className="btn btn-primary w-100">Login</button>
         </form>

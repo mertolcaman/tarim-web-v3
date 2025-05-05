@@ -1,5 +1,7 @@
-// components/RegisterForm.jsx
 import React, { useState } from 'react';
+import axios from 'axios';
+
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 const RegisterForm = ({ onRegister }) => {
     const [formData, setFormData] = useState({
@@ -16,15 +18,29 @@ const RegisterForm = ({ onRegister }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match!");
             return;
         }
 
-        alert(`Registered as ${formData.email}`);
-        if (onRegister) onRegister();
+        try {
+            const payload = {
+                org_email: formData.orgEmail,
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+                phone: formData.phone,
+                address: formData.address
+            };
+
+            const response = await axios.post(`${API_BASE}/auth/register`, payload);
+            alert(response.data.message);
+            if (onRegister) onRegister();
+        } catch (error) {
+            alert(error.response?.data?.detail || "Registration failed.");
+        }
     };
 
     return (
@@ -35,7 +51,6 @@ const RegisterForm = ({ onRegister }) => {
                     type="email"
                     name="orgEmail"
                     className="form-control"
-                    placeholder="Organization email"
                     value={formData.orgEmail}
                     onChange={handleChange}
                     required
@@ -47,7 +62,6 @@ const RegisterForm = ({ onRegister }) => {
                     type="text"
                     name="username"
                     className="form-control"
-                    placeholder="Your full name"
                     value={formData.username}
                     onChange={handleChange}
                     required
@@ -59,7 +73,6 @@ const RegisterForm = ({ onRegister }) => {
                     type="email"
                     name="email"
                     className="form-control"
-                    placeholder="Email"
                     value={formData.email}
                     onChange={handleChange}
                     required
@@ -71,7 +84,6 @@ const RegisterForm = ({ onRegister }) => {
                     type="password"
                     name="password"
                     className="form-control"
-                    placeholder="Password"
                     value={formData.password}
                     onChange={handleChange}
                     required
@@ -83,7 +95,6 @@ const RegisterForm = ({ onRegister }) => {
                     type="password"
                     name="confirmPassword"
                     className="form-control"
-                    placeholder="Confirm Password"
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
@@ -95,7 +106,6 @@ const RegisterForm = ({ onRegister }) => {
                     type="tel"
                     name="phone"
                     className="form-control"
-                    placeholder="Phone number (ex: 905411234567)"
                     value={formData.phone}
                     onChange={handleChange}
                     required
@@ -106,7 +116,6 @@ const RegisterForm = ({ onRegister }) => {
                 <textarea
                     name="address"
                     className="form-control"
-                    placeholder="Address"
                     rows="2"
                     value={formData.address}
                     onChange={handleChange}

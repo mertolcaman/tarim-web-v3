@@ -4,11 +4,9 @@ import DeviceSelector from './DeviceSelector';
 import SensorTable from './SensorTable';
 import Loader from './Loader';
 
-
 const API_BASE = import.meta.env.VITE_API_BASE;
 
-
-const Dashboard = () => {
+const Dashboard = ({ onLogout }) => {
     const [devices, setDevices] = useState([]);
     const [selectedDevice, setSelectedDevice] = useState("ALL");
     const [limit, setLimit] = useState(10);
@@ -52,11 +50,22 @@ const Dashboard = () => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("isLoggedIn");
+        if (onLogout) onLogout();
+    };
+
     if (loading) return <Loader />;
 
     return (
         <div className="container mt-5">
-            <h2 className="d-flex align-items-center justify-content-center">IoT Dashboard</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2 className="text-center w-100">IoT Dashboard</h2>
+                <button className="btn btn-outline-danger position-absolute end-0 me-3" onClick={handleLogout}>
+                    Logout
+                </button>
+            </div>
+
             <DeviceSelector
                 devices={devices}
                 selectedDevice={selectedDevice}
