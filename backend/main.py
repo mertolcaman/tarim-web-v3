@@ -1,11 +1,10 @@
 from fastapi import FastAPI
-from routers import devices
+from routers.devices import router as devices_router
 from routers.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# ✅ Enable CORS for local frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -14,9 +13,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Register routers
-app.include_router(devices.router)
-app.include_router(auth_router)  # Now only adds "/auth", not "/auth/auth"
+app.include_router(devices_router)
+app.include_router(auth_router)
 
 @app.get("/")
 def read_root():
