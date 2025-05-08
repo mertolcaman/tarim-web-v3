@@ -109,86 +109,88 @@ function SensorTable({ sensorData }) {
                     )}
                 </p>
             </div>
+            <div style={{ overflowX: 'auto', maxWidth: '100%' }}>
+                <table className="table table-bordered table-striped text-center align-middle w-auto">
+                    <thead>
+                        <tr>
+                            {sensorData[0] && Object.keys(sensorData[0]).map((key) => (
+                                <th key={key}>
+                                    <div className="d-flex flex-column">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <span>{key}</span>
+                                            {!SKIP_FILTER_KEYS.includes(key) && (
+                                                <div className="btn-group btn-group-sm ms-1">
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-link p-0"
+                                                        onClick={() => handleSortClick(key, 'asc')}
+                                                        title="Sort ascending"
+                                                    >
+                                                        🔼
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-link p-0"
+                                                        onClick={() => handleSortClick(key, 'desc')}
+                                                        title="Sort descending"
+                                                    >
+                                                        🔽
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
 
-            <table className="table table-bordered table-striped text-center align-middle w-auto">
-                <thead>
-                    <tr>
-                        {sensorData[0] && Object.keys(sensorData[0]).map((key) => (
-                            <th key={key}>
-                                <div className="d-flex flex-column">
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <span>{key}</span>
                                         {!SKIP_FILTER_KEYS.includes(key) && (
-                                            <div className="btn-group btn-group-sm ms-1">
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-link p-0"
-                                                    onClick={() => handleSortClick(key, 'asc')}
-                                                    title="Sort ascending"
+                                            key === 'device_id' ? (
+                                                <select
+                                                    className="form-select form-select-sm mt-1"
+                                                    value={filters[key] || ''}
+                                                    onChange={(e) => handleFilterChange(key, e.target.value)}
                                                 >
-                                                    🔼
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-link p-0"
-                                                    onClick={() => handleSortClick(key, 'desc')}
-                                                    title="Sort descending"
-                                                >
-                                                    🔽
-                                                </button>
-                                            </div>
+                                                    <option value="">All Devices</option>
+                                                    {uniqueDeviceIds.map(deviceId => (
+                                                        <option key={deviceId} value={deviceId}>{deviceId}</option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                <div className="d-flex mt-1">
+                                                    <select
+                                                        className="form-select form-select-sm"
+                                                        style={{ width: '70px' }}
+                                                        onChange={(e) => handleFilterOpChange(key, e.target.value)}
+                                                    >
+                                                        <option value="=">=</option>
+                                                        <option value=">">&gt;</option>
+                                                        <option value="<">&lt;</option>
+                                                    </select>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control form-control-sm"
+                                                        placeholder="Filter"
+                                                        onChange={(e) => handleFilterChange(key, e.target.value)}
+                                                    />
+                                                </div>
+                                            )
                                         )}
                                     </div>
-
-                                    {!SKIP_FILTER_KEYS.includes(key) && (
-                                        key === 'device_id' ? (
-                                            <select
-                                                className="form-select form-select-sm mt-1"
-                                                value={filters[key] || ''}
-                                                onChange={(e) => handleFilterChange(key, e.target.value)}
-                                            >
-                                                <option value="">All Devices</option>
-                                                {uniqueDeviceIds.map(deviceId => (
-                                                    <option key={deviceId} value={deviceId}>{deviceId}</option>
-                                                ))}
-                                            </select>
-                                        ) : (
-                                            <div className="d-flex mt-1">
-                                                <select
-                                                    className="form-select form-select-sm"
-                                                    style={{ width: '70px' }}
-                                                    onChange={(e) => handleFilterOpChange(key, e.target.value)}
-                                                >
-                                                    <option value="=">=</option>
-                                                    <option value=">">&gt;</option>
-                                                    <option value="<">&lt;</option>
-                                                </select>
-                                                <input
-                                                    type="text"
-                                                    className="form-control form-control-sm"
-                                                    placeholder="Filter"
-                                                    onChange={(e) => handleFilterChange(key, e.target.value)}
-                                                />
-                                            </div>
-                                        )
-                                    )}
-                                </div>
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredData.map((row, index) => (
-                        <tr key={index}>
-                            {Object.keys(row).map((key, idx) => (
-                                <td key={idx}>
-                                    {key === 'time_created_at' ? formatLocalTime(row[key]) : String(row[key])}
-                                </td>
+                                </th>
                             ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        {filteredData.map((row, index) => (
+                            <tr key={index}>
+                                {Object.keys(row).map((key, idx) => (
+                                    <td key={idx}>
+                                        {key === 'time_created_at' ? formatLocalTime(row[key]) : String(row[key])}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
