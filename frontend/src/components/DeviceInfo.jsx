@@ -25,7 +25,7 @@ const DeviceInfo = ({ devices }) => {
                                 <p className="mt-2 mb-1"><strong>Location:</strong> {device.device_location}</p>
                                 <p className="mb-1"><strong>Last Seen:</strong> {formatToTurkeyTime(device.last_visibility)}</p>
                                 <p className="mb-1"><strong>Frequency:</strong> {device.data_frequency ? `${device.data_frequency}s` : "N/A"}</p>
-                                <p className="mb-0"><strong>Created:</strong> {new Date(device.time_created_at).toLocaleString()}</p>
+                                <p className="mb-0"><strong>Created:</strong> {formatToTurkeyTime(device.time_created_at)}</p>
                             </div>
                         </div>
                     </div>
