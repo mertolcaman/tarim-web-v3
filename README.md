@@ -123,6 +123,6 @@ Mert Olcaman
 github.com/mertolcaman
 
 📝 License
-This project is open-source and free to use for educational or non-commercial purposes.
-
+This project is not open-source and not free to use for any purposes.
+If you have any questions, please don't hesitate to contact me.
 ---
