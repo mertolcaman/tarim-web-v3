@@ -50,20 +50,13 @@ const Dashboard = ({ onLogout }) => {
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem("isLoggedIn");
-        if (onLogout) onLogout();
-    };
-
     if (loading) return <Loader />;
 
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2 className="text-center w-100">IoT Dashboard</h2>
-                <button className="btn btn-outline-danger position-absolute end-0 me-3" onClick={handleLogout}>
-                    Logout
-                </button>
+
             </div>
 
             <DeviceSelector

@@ -1,0 +1,33 @@
+import React from "react";
+
+const DeviceInfo = ({ devices }) => {
+    if (!devices || !Array.isArray(devices)) {
+        return <p>Loading devices...</p>;
+    }
+
+    return (
+        <div className="container mt-5">
+
+            <div className="row">
+                {devices.map(device => (
+                    <div className="col-md-4 mb-4" key={device.device_id}>
+                        <div className="card shadow-sm">
+                            <div className="card-body">
+                                <h5 className="card-title">Device #{device.device_id}</h5>
+                                <span className={`badge ${device.device_status ? "bg-success" : "bg-danger"}`}>
+                                    {device.device_status ? "Active" : "Inactive"}
+                                </span>
+                                <p className="mt-2 mb-1"><strong>Location:</strong> {device.device_location}</p>
+                                <p className="mb-1"><strong>Last Seen:</strong> {new Date(device.last_visibility).toLocaleString()}</p>
+                                <p className="mb-1"><strong>Frequency:</strong> {device.data_frequency ? `${device.data_frequency}s` : "N/A"}</p>
+                                <p className="mb-0"><strong>Created:</strong> {new Date(device.time_created_at).toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default DeviceInfo;

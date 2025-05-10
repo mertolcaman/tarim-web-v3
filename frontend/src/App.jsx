@@ -1,6 +1,9 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import DevicePage from './components/DevicePage';
+import Navbar from './components/Navbar';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -11,10 +14,18 @@ function App() {
     localStorage.setItem('isLoggedIn', isLoggedIn.toString());
   }, [isLoggedIn]);
 
-  return isLoggedIn ? (
-    <Dashboard onLogout={() => setIsLoggedIn(false)} />
-  ) : (
-    <Login onLogin={() => setIsLoggedIn(true)} />
+  if (!isLoggedIn) {
+    return <Login onLogin={() => setIsLoggedIn(true)} />;
+  }
+
+  return (
+    <Router>
+      <Navbar onLogout={() => setIsLoggedIn(false)} />
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/devices" element={<DevicePage />} />
+      </Routes>
+    </Router>
   );
 }
 
