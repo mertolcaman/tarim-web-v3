@@ -1,4 +1,9 @@
 import React from "react";
+const formatToTurkeyTime = (utcString) => {
+    const date = new Date(utcString);
+    date.setHours(date.getHours() + 3); // Convert to Turkey time
+    return date.toLocaleString();
+};
 
 const DeviceInfo = ({ devices }) => {
     if (!devices || !Array.isArray(devices)) {
@@ -18,7 +23,7 @@ const DeviceInfo = ({ devices }) => {
                                     {device.device_status ? "Active" : "Inactive"}
                                 </span>
                                 <p className="mt-2 mb-1"><strong>Location:</strong> {device.device_location}</p>
-                                <p className="mb-1"><strong>Last Seen:</strong> {new Date(device.last_visibility).toLocaleString()}</p>
+                                <p className="mb-1"><strong>Last Seen:</strong> {formatToTurkeyTime(device.last_visibility)}</p>
                                 <p className="mb-1"><strong>Frequency:</strong> {device.data_frequency ? `${device.data_frequency}s` : "N/A"}</p>
                                 <p className="mb-0"><strong>Created:</strong> {new Date(device.time_created_at).toLocaleString()}</p>
                             </div>
