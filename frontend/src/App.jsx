@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import DevicePage from './components/DevicePage';
 import Navbar from './components/Navbar';
+import ChatPage from './components/chatbot/ChatPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -24,6 +25,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/devices" element={<DevicePage />} />
+        <Route path="/chat" element={<ChatPage />} />
       </Routes>
     </Router>
   );

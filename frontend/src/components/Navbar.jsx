@@ -29,6 +29,9 @@ const Navbar = ({ onLogout }) => {
                     <li className="nav-item">
                         <Link className="nav-link" to="/devices">Devices</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/chat">Assistant Chat</Link>
+                    </li>
                 </ul>
                 <button className="btn btn-outline-light" onClick={onLogout}>Logout</button>
             </div>
