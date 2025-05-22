@@ -25,6 +25,8 @@ const DeviceInfo = ({ devices }) => {
                                 <p className="mt-2 mb-1"><strong>Location:</strong> {device.device_location}</p>
                                 <p className="mb-1"><strong>Last Seen:</strong> {formatToTurkeyTime(device.last_visibility)}</p>
                                 <p className="mb-1"><strong>Frequency:</strong> {device.data_frequency ? `${device.data_frequency}s` : "N/A"}</p>
+                                <p className="mb-1"><strong>Transmit Period:</strong> {device.transmit_period ? `${device.transmit_period}s` : "N/A"}</p>
+                                <p className="mb-1"><strong>Measurement Count:</strong> {device.measurement_count ?? "N/A"}</p>
                                 <p className="mb-0"><strong>Created:</strong> {formatToTurkeyTime(device.time_created_at)}</p>
                             </div>
                         </div>
