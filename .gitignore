@@ -16,3 +16,6 @@ Thumbs.db
 # === Keys ===
 deploy_key
 deploy_key.pub
+
+# === Virtual Environment ===
+venv/

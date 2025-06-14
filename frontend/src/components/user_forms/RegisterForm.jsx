@@ -3,8 +3,13 @@ import axios from 'axios';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
+
+
+
 const RegisterForm = ({ onRegister }) => {
+
     const [formData, setFormData] = useState({
+        accountType: "user",
         orgEmail: '',
         username: '',
         email: '',
@@ -20,16 +25,24 @@ const RegisterForm = ({ onRegister }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match!");
+
+        // Ensure one of the emails is provided
+        if (
+            (formData.accountType === "organization" && !formData.orgEmail) ||
+            (formData.accountType === "user" && !formData.email)
+        ) {
+            alert("Please fill the required email field.");
             return;
         }
 
+
+
         try {
             const payload = {
-                org_email: formData.orgEmail,
+                account_type: formData.accountType,
+                org_email: formData.orgEmail || null,
                 username: formData.username,
-                email: formData.email,
+                email: formData.email || null,
                 password: formData.password,
                 phone: formData.phone,
                 address: formData.address
@@ -44,7 +57,38 @@ const RegisterForm = ({ onRegister }) => {
     };
 
     return (
+
         <form onSubmit={handleSubmit}>
+            <div className="form-group mb-3">
+                <label>Registering As</label>
+                <div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id="registerUser"
+                            name="Type"
+                            value="user"
+                            checked={formData.accountType === "user"}
+                            onChange={(e) => setFormData({ ...formData, accountType: e.target.value })}
+                            className="form-check-input"
+                        />
+                        <label htmlFor="registerUser" className="form-check-label">User</label>
+                    </div>
+                    <div className="form-check form-check-inline">
+                        <input
+                            type="radio"
+                            id="registerOrg"
+                            name="accountType"
+                            value="organization"
+                            checked={formData.accountType === "organization"}
+                            onChange={(e) => setFormData({ ...formData, accountType: e.target.value })}
+                            className="form-check-input"
+                        />
+                        <label htmlFor="registerOrg" className="form-check-label">Organization</label>
+                    </div>
+                </div>
+            </div>
+
             <div className="form-group mb-3">
                 <label>Organization Email</label>
                 <input
@@ -53,11 +97,14 @@ const RegisterForm = ({ onRegister }) => {
                     className="form-control"
                     value={formData.orgEmail}
                     onChange={handleChange}
-                    required
+                    disabled={formData.accountType === "user"}
+                    style={{ backgroundColor: formData.accountType === "user" ? '#e9ecef' : 'white' }}
+                    placeholder="e.g. info@company.com"
+                // required
                 />
             </div>
             <div className="form-group mb-3">
-                <label>User Full Name</label>
+                <label>Full Name</label>
                 <input
                     type="text"
                     name="username"
@@ -75,7 +122,10 @@ const RegisterForm = ({ onRegister }) => {
                     className="form-control"
                     value={formData.email}
                     onChange={handleChange}
-                    required
+                    disabled={formData.accountType === "organization"}
+                    style={{ backgroundColor: formData.accountType === "organization" ? '#e9ecef' : 'white' }}
+                    placeholder="e.g. user@gmail.com"
+                // required
                 />
             </div>
             <div className="form-group mb-3">

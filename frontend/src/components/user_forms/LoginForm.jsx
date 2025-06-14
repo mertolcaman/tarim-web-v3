@@ -4,7 +4,11 @@ import axios from 'axios';
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 const LoginForm = ({ onLogin }) => {
-    const [loginData, setLoginData] = useState({ email: '', password: '' });
+    const [loginData, setLoginData] = useState({
+        account_type: "user", // default to user
+        email: '',
+        password: ''
+    });
 
     const handleChange = (e) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -23,6 +27,35 @@ const LoginForm = ({ onLogin }) => {
 
     return (
         <form onSubmit={handleSubmit}>
+            <div className="form-group mb-3">
+                <label>Login As</label>
+                <p></p>
+                <div className="form-check form-check-inline">
+                    <input
+                        type="radio"
+                        id="loginUser"
+                        name="account_type"
+                        value="user"
+                        checked={loginData.account_type === "user"}
+                        onChange={handleChange}
+                        className="form-check-input"
+                    />
+                    <label htmlFor="loginUser" className="form-check-label">User</label>
+                </div>
+                <div className="form-check form-check-inline">
+                    <input
+                        type="radio"
+                        id="loginOrg"
+                        name="account_type"
+                        value="organization"
+                        checked={loginData.account_type === "organization"}
+                        onChange={handleChange}
+                        className="form-check-input"
+                    />
+                    <label htmlFor="loginOrg" className="form-check-label">Organization</label>
+                </div>
+            </div>
+
             <div className="form-group mb-3">
                 <label>Email address</label>
                 <input

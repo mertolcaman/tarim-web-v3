@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Login from './components/Login';
+import Login from './components/user_forms/Login';
 import Dashboard from './components/Dashboard';
 import DevicePage from './components/DevicePage';
 import Navbar from './components/Navbar';
