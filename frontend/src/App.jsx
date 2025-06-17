@@ -6,6 +6,8 @@ import DevicePage from './components/DevicePage';
 import Navbar from './components/Navbar';
 import ChatPage from './components/chatbot/ChatPage';
 
+import AdvancedDashboard from './pages/AdvancedDashboard';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -26,6 +28,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/devices" element={<DevicePage />} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/charts" element={<AdvancedDashboard />} />
       </Routes>
     </Router>
   );
