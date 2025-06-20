@@ -1,7 +1,7 @@
 import React from "react";
 const formatToTurkeyTime = (utcString) => {
     const date = new Date(utcString);
-    date.setHours(date.getHours() + 3); // Convert to Turkey time
+    date.setHours(date.getHours()); // Convert to Turkey time
     return date.toLocaleString();
 };
 
