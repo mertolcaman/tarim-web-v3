@@ -2,7 +2,7 @@ import React from "react";
 
 function formatToTurkeyTime(utcString) {
     const date = new Date(utcString);
-    date.setHours(date.getHours() + 3); // Turkey is UTC+3
+    date.setHours(date.getHours()); // Turkey is UTC+3
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
