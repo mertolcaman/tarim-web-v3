@@ -14,7 +14,13 @@ def get_all_devices():
         cur.execute("SELECT * FROM devices")
         rows = cur.fetchall()
         column_names = [desc[0] for desc in cur.description]
-        data = [dict(zip(column_names, row)) for row in rows]
+        data = []
+        for row in rows:
+            row_dict = dict(zip(column_names, row))
+            for key in ['last_visibility', 'time_created_at']:
+                if key in row_dict and isinstance(row_dict[key], datetime):
+                    row_dict[key] = row_dict[key].strftime("%Y-%m-%d %H:%M:%S")
+            data.append(row_dict)
     conn.close()
     return data
 
