@@ -4,6 +4,8 @@ from pydantic import BaseModel
 import boto3
 import os
 
+print("✅ aws.py router loaded")
+
 router = APIRouter(prefix="/aws", tags=["Aws"])
 
 s3 = boto3.client("s3")
