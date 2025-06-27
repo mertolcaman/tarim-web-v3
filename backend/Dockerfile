@@ -4,15 +4,15 @@ FROM python:3.11-slim
 # 🏠 Set working directory
 WORKDIR /app
 
-# 🚀 Copy project files
-COPY . .
-
-# Copy only requirements first for better caching
+# Copy only requirements first (better caching)
 COPY requirements.txt .
 
-# 🔐 Install dependencies
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
+
+# Then copy everything else
+COPY . .
+
 
 # 🔁 Set environment variable to ensure live reload off in container
 ENV PYTHONUNBUFFERED=1
