@@ -7,7 +7,7 @@ import Navbar from './components/Navbar';
 import ChatPage from './components/chatbot/ChatPage';
 
 import AdvancedDashboard from './pages/AdvancedDashboard';
-import UploadPage from "./pages/UploadPage";
+import Upload from "./pages/UploadPage";
 
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
         <Route path="/devices" element={<DevicePage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/charts" element={<AdvancedDashboard />} />
-        <Route path='/upload-firmware' element={<UploadPage />} />
+        <Route path='/upload-firmware' element={<Upload />} />
 
       </Routes>
     </Router>
