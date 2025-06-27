@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function S3Upload() {
+export default function Upload() {
     const [file, setFile] = useState(null);
     const [status, setStatus] = useState("");
 

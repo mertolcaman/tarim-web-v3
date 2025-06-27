@@ -1,10 +1,10 @@
-import S3Upload from "../upload/S3Upload";
+import Upload from "../upload/upload";
 
 export default function UploadPage() {
     return (
         <div style={{ padding: "2rem" }}>
             <h1>Firmware Upload Panel</h1>
-            <S3Upload />
+            <Upload />
         </div>
     );
 }
