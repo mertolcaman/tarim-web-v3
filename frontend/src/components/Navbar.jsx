@@ -35,6 +35,9 @@ const Navbar = ({ onLogout }) => {
                     <li className="nav-item">
                         <Link className="nav-link" to="/charts">Charts</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/upload-firmware">Upload Firmware</Link>
+                    </li>
 
 
                 </ul>
