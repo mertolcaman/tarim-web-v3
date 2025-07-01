@@ -89,14 +89,33 @@ const DeviceInfo = ({ devices }) => {
     }
 
 
+
+    const handleGpsRequest = async (deviceId) => {
+        try {
+            const response = await axios.post(`${API_BASE}/devices/gps_request`, null, {
+                params: {
+                    gps_request: true,
+                    device_id: deviceId,
+                },
+            });
+
+            alert(`📡 ${response.data.message}`);
+            window.location.reload();
+        } catch (error) {
+            console.error("❌ Failed to send GPS request:", error);
+            alert("❌ Failed to request GPS.");
+        }
+    };
+
+
     return (
         <div className="container mt-5">
             <h3 className="mb-4">Device Overview</h3>
             <div className="row">
                 {devices.map(device => (
                     <div className="col-md-6 col-lg-4 mb-4" key={device.device_id}>
-                        <div className="card shadow-sm">
-                            <div className="card-body">
+                        <div className="card shadow-sm h-100">
+                            <div className="card-body d-flex flex-column">
                                 <div className="d-flex justify-content-between align-items-center mb-2">
                                     {editingId === device.device_id ? (
                                         <div className="w-100">
@@ -132,21 +151,32 @@ const DeviceInfo = ({ devices }) => {
                                         </>
                                     )}
                                 </div>
+
                                 <hr />
+
                                 <p className="mb-1"><strong>ID:</strong> {device.device_id}</p>
                                 <p className="mb-1"><strong>OTA Status:</strong> {renderOtaStatus(device.ota_status)}</p>
                                 <p className="mb-1"><strong>Location:</strong> {device.device_location}</p>
                                 <p className="mb-1"><strong>Last Seen:</strong> {formatToTurkeyTime(device.last_visibility)}</p>
                                 <p className="mb-1"><strong>Expected Data Period:</strong> {device.transmit_period ? formatSecondsToHourMinute(device.transmit_period) : "N/A"}</p>
-
-
                                 <p className="mb-0"><strong>Created At:</strong> {formatToTurkeyTime(device.time_created_at)}</p>
+
+                                <div className="mt-3 d-flex justify-content-center border-top pt-3">
+                                    <button
+                                        className="btn btn-sm btn-outline-primary"
+                                        title="Send a GPS request to this device"
+                                        onClick={() => handleGpsRequest(device.device_id)}
+                                    >
+                                        📡 Request GPS
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
-        </div >
+        </div>
+
     );
 };
 

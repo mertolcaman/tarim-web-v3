@@ -107,6 +107,7 @@ def get_device_data_by_range(
 
 
 
+#change the device name
 @router.post("/edit_device_name")
 def edit_device_name(
     device_name: str,
@@ -130,6 +131,38 @@ def edit_device_name(
 
         return {
             "message": f" Device name set as {device_name}"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+#makes the gps_request in devices table true
+@router.post("/gps_request")
+def send_gps_request(
+    gps_request: bool,
+    device_id: str
+    ):
+    try:
+        conn = get_connection()
+        with conn.cursor() as cur:
+            cur.execute("""UPDATE devices 
+                        SET gps_request = %s
+                        WHERE device_id = %s""", 
+                        (
+                            gps_request,
+                            device_id
+                        ))
+            if cur.rowcount == 0:
+                raise HTTPException(status_code=404, detail="No matching device found for user.")
+
+        conn.commit()
+        conn.close()
+
+        return {
+            "message": f"GPS request set to {gps_request} for device {device_id}"
         }
 
     except HTTPException:
