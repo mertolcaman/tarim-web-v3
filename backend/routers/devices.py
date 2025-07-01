@@ -104,3 +104,35 @@ def get_device_data_by_range(
         return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@router.post("/edit_device_name")
+def edit_device_name(
+    device_name: str,
+    device_id: str
+    ):
+    try:
+        conn = get_connection()
+        with conn.cursor() as cur:
+            cur.execute("""UPDATE devices 
+                        SET device_name = %s
+                        WHERE device_id = %s""", 
+                        (
+                            device_name,
+                            device_id
+                        ))
+            if cur.rowcount == 0:
+                raise HTTPException(status_code=404, detail="No matching device found for user.")
+
+        conn.commit()
+        conn.close()
+
+        return {
+            "message": f" Device name set as {device_name}"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

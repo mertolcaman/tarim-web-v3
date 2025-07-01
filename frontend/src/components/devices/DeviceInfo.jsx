@@ -1,4 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+
+
+const API_BASE = import.meta.env.VITE_API_BASE;
+
 
 function formatToTurkeyTime(utcString) {
     const date = new Date(utcString);
@@ -40,10 +45,49 @@ function formatSecondsToHourMinute(seconds) {
 
 
 
+
+
 const DeviceInfo = ({ devices }) => {
+    const [editedNames, setEditedNames] = useState({});
+    const [editingId, setEditingId] = useState(null);
+
+    const handleEditClick = (deviceId, currentName) => {
+        setEditingId(deviceId);
+        setEditedNames(prev => ({ ...prev, [deviceId]: currentName }));
+    };
+
+    const handleNameChange = (deviceId, newName) => {
+        setEditedNames(prev => ({ ...prev, [deviceId]: newName }));
+    };
+
+    const handleSaveName = async (deviceId) => {
+        const updatedName = editedNames[deviceId];
+        console.log(`Save name for ${deviceId}: ${updatedName}`);
+        setEditingId(null);
+        try {
+            const response = await axios.post(`${API_BASE}/devices/edit_device_name`, null, {
+                params: {
+                    device_name: updatedName,
+                    device_id: deviceId,
+                },
+            });
+
+            alert(`✅ ${response.data.message}`);
+            window.location.reload(); // 🔄 Refresh the page after success
+        } catch (error) {
+            console.error("❌ Failed to update device name:", error);
+            alert("❌ Failed to update device name.");
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditingId(null);
+    };
+
     if (!devices || !Array.isArray(devices)) {
         return <p>Loading devices...</p>;
     }
+
 
     return (
         <div className="container mt-5">
@@ -54,10 +98,39 @@ const DeviceInfo = ({ devices }) => {
                         <div className="card shadow-sm">
                             <div className="card-body">
                                 <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <h5 className="card-title mb-0">{device.device_name}</h5>
-                                    <span className={`badge ${device.device_status ? "bg-success" : "bg-danger"}`}>
-                                        {device.device_status ? "Active" : "Inactive"}
-                                    </span>
+                                    {editingId === device.device_id ? (
+                                        <div className="w-100">
+                                            <input
+                                                type="text"
+                                                className="form-control form-control-sm mb-2"
+                                                value={editedNames[device.device_id]}
+                                                onChange={(e) => handleNameChange(device.device_id, e.target.value)}
+                                            />
+                                            <div className="d-flex gap-2">
+                                                <button className="btn btn-sm btn-success" onClick={() => handleSaveName(device.device_id)}>Save</button>
+                                                <button className="btn btn-sm btn-secondary" onClick={handleCancelEdit}>Cancel</button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <h5 className="card-title mb-0">
+                                                {device.device_name}{" "}
+                                                <span
+                                                    role="button"
+                                                    className="ms-2"
+                                                    title="Edit name"
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={() => handleEditClick(device.device_id, device.device_name)}
+                                                >
+                                                    ✏️
+                                                </span>
+                                            </h5>
+
+                                            <span className={`badge ${device.device_status ? "bg-success" : "bg-danger"}`}>
+                                                {device.device_status ? "Active" : "Inactive"}
+                                            </span>
+                                        </>
+                                    )}
                                 </div>
                                 <hr />
                                 <p className="mb-1"><strong>ID:</strong> {device.device_id}</p>
@@ -73,7 +146,7 @@ const DeviceInfo = ({ devices }) => {
                     </div>
                 ))}
             </div>
-        </div>
+        </div >
     );
 };
 
