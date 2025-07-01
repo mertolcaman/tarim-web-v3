@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Login from './components/user_forms/Login';
 import Dashboard from './components/Dashboard';
-import DevicePage from './components/DevicePage';
+import DevicePage from './pages/DevicePage';
 import Navbar from './components/Navbar';
 import ChatPage from './components/chatbot/ChatPage';
 

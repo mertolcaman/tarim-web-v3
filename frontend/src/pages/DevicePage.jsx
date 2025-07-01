@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DeviceMap from "./DeviceMap";
-import DeviceInfo from "./DeviceInfo";
+import DeviceMap from "../components/devices/DeviceMap";
+import DeviceInfo from "../components/devices/DeviceInfo";
+
 
 const API_BASE = import.meta.env.VITE_API_BASE;
 
