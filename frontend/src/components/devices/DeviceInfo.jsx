@@ -18,11 +18,11 @@ function formatToTurkeyTime(utcString) {
 function renderOtaStatus(status) {
     switch (status) {
         case "updated":
-            return <span className="badge bg-success">✅ Up to date</span>;
+            return <span className="badge bg-success">✅ Updated</span>;
         case "pending":
-            return <span className="badge bg-warning text-dark">🛠️ Updating...</span>;
+            return <span className="badge bg-warning text-dark">🛠️ Pending...</span>;
         case "failed":
-            return <span className="badge bg-danger">⚠️ Update failed</span>;
+            return <span className="badge bg-danger">⚠️ Failed</span>;
         default:
             return <span className="badge bg-dark">❓ Unknown</span>;
     }
