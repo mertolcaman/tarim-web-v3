@@ -14,7 +14,7 @@ export default function Upload() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                filename: "firmware.bin", // filename to overwrite in S3
+                filename: file.name, // filename to overwrite in S3
                 content_type: file.type,
             }),
         });
@@ -39,7 +39,7 @@ export default function Upload() {
         });
 
         if (uploadRes.ok) {
-            setStatus("✅ Upload successful! `firmware.bin` updated.");
+            setStatus(`✅ Upload successful! ${file.name} updated.`);
         } else {
             setStatus("❌ Upload failed.");
         }
