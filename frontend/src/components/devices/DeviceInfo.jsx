@@ -160,8 +160,18 @@ const DeviceInfo = ({ devices }) => {
                                 <p className="mb-1"><strong>Last Seen:</strong> {formatToTurkeyTime(device.last_visibility)}</p>
                                 <p className="mb-1"><strong>Expected Data Period:</strong> {device.transmit_period ? formatSecondsToHourMinute(device.transmit_period) : "N/A"}</p>
                                 <p className="mb-0"><strong>Created At:</strong> {formatToTurkeyTime(device.time_created_at)}</p>
+                                <p className="mb-0">
+                                    <strong>GPS Request:</strong>{" "}
+                                    {device.gps_request ? (
+                                        <span className="badge bg-success">✅ True</span>
+                                    ) : (
+                                        <span className="badge bg-secondary">❌ False</span>
+                                    )}
+                                </p>
 
                                 <div className="mt-3 d-flex justify-content-center border-top pt-3">
+
+
                                     <button
                                         className="btn btn-sm btn-outline-primary"
                                         title="Send a GPS request to this device"
