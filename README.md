@@ -28,7 +28,6 @@ A full-stack web application to monitor sensor data from IoT-enabled agricultura
 ---
 
 ### 📁 Project Structure
-```
 tarim-web-v3/
 ├── backend/                     # FastAPI backend
 │   ├── main.py
@@ -54,7 +53,7 @@ tarim-web-v3/
 │
 ├── .gitignore
 └── README.md
-```
+
 
 ---
 
