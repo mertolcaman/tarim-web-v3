@@ -28,6 +28,7 @@ A full-stack web application to monitor sensor data from IoT-enabled agricultura
 ---
 
 ### 📁 Project Structure
+```
 tarim-web-v3/
 ├── backend/                     # FastAPI backend
 │   ├── main.py
@@ -53,7 +54,7 @@ tarim-web-v3/
 │
 ├── .gitignore
 └── README.md
-
+```
 
 ---
 
@@ -119,9 +120,6 @@ This monorepo is being extended to include:
 
  Live alert popups via WebSocket or polling
 
-👨‍💻 Developed by
-Mert Olcaman
-github.com/mertolcaman
 
 📝 License
 This project is not open-source and not free to use for any purposes.
