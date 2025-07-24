@@ -1,0 +1,48 @@
+name: Deploy Backend & Frontend to EC2
+
+on:
+  push:
+    branches: [dev, main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set deployment variables
+        run: |
+          echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          if [[ "${GITHUB_REF##*/}" == "dev" ]]; then
+            echo "FRONTEND_PATH=/var/www/dev" >> $GITHUB_ENV
+            echo "BACKEND_PORT=8001" >> $GITHUB_ENV
+          else
+            echo "FRONTEND_PATH=/var/www/prod" >> $GITHUB_ENV
+            echo "BACKEND_PORT=8000" >> $GITHUB_ENV
+          fi
+
+      - name: Upload frontend files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          source: "./frontend/dist/*"
+          target: ${{ env.FRONTEND_PATH }}
+
+      - name: SSH and deploy backend via Docker Compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/tarim-web-v3
+            git fetch origin
+            git checkout $BRANCH_NAME
+            git pull origin $BRANCH_NAME
+
+            docker compose -f backend.yml down || true
+            docker compose -f backend.yml up -d --build
