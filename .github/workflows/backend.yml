@@ -2,7 +2,8 @@ name: "🚀 CI/CD: Deploy Backend (FastAPI + Docker)"
 
 on:
   push:
-    branches: [main, dev]
+    branches:
+      - main
     paths:
       - "backend/**"
       - ".github/workflows/backend.yml"
@@ -21,20 +22,15 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP_DEV }} >> ~/.ssh/known_hosts
 
       - name: "🚀 Deploy and Restart Backend"
         run: |
-          BRANCH_NAME="${GITHUB_REF##*/}"
-          ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_PUBLIC_IP }} << EOF
+          ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_PUBLIC_IP_DEV }} << 'EOF'
             cd /home/ubuntu/tarim-web-v3/backend
-            git pull origin \$BRANCH_NAME
-            docker stop tarim-backend-\$BRANCH_NAME || true
-            docker rm tarim-backend-\$BRANCH_NAME || true
-            docker build -t tarim-backend:\$BRANCH_NAME .
-            PORT=8000
-            if [[ "\$BRANCH_NAME" == "dev" ]]; then
-              PORT=8001
-            fi
-            docker run --env-file .env -d --name tarim-backend-\$BRANCH_NAME -p \$PORT:8000 tarim-backend:\$BRANCH_NAME
+            git pull origin main
+            docker stop tarim-backend || true
+            docker rm tarim-backend || true
+            docker build -t tarim-backend .
+            docker run --env-file .env -d --name tarim-backend -p 8000:8000 tarim-backend
           EOF
