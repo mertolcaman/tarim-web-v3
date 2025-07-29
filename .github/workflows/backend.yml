@@ -3,7 +3,7 @@ name: "🚀 CI/CD: Deploy Backend (FastAPI + Docker)"
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - "backend/**"
       - ".github/workflows/backend.yml"
@@ -28,7 +28,7 @@ jobs:
         run: |
           ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_PUBLIC_IP_DEV }} << 'EOF'
             cd /home/ubuntu/tarim-web-v3/backend
-            git pull origin main
+            git pull origin dev
             docker stop tarim-backend || true
             docker rm tarim-backend || true
             docker build -t tarim-backend .
