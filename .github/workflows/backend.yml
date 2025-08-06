@@ -3,7 +3,7 @@ name: "🚀 CI/CD: Deploy Backend (FastAPI + Docker)"
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - "backend/**"
       - ".github/workflows/backend.yml"
@@ -22,13 +22,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP_DEV }} >> ~/.ssh/known_hosts
 
       - name: "🚀 Deploy and Restart Backend"
         run: |
-          ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+          ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_PUBLIC_IP_DEV }} << 'EOF'
             cd /home/ubuntu/tarim-web-v3/backend
-            git pull origin main
+            git pull origin dev
             docker stop tarim-backend || true
             docker rm tarim-backend || true
             docker build -t tarim-backend .
